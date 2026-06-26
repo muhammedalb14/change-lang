@@ -1,0 +1,6 @@
+# User-specific runtime settings written by LayoutFix at run time
+LayoutFix.ini
+
+# Build / test artifacts
+*.exe.bak
+LayoutFix_new.exe

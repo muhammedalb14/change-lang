@@ -1,63 +1,68 @@
 # LayoutFix — Arabic ⇄ English keyboard-layout fixer
 
-Fixes text typed on the **wrong keyboard layout**. When you forget to switch
-layouts and type Arabic words while still on English (or vice-versa), you get
-gibberish. LayoutFix re-maps every key to what it *should* have produced.
+Fixes text typed on the **wrong keyboard layout**. Type Arabic while still on
+English (or the reverse) and you get gibberish — LayoutFix re-maps every key to
+what it *should* have produced.
 
 ```
 hkh h;jf fhguvfdi   →   انا اكتب بالعربيه
-hello (typed on AR) →   اثممخ  →  hello
 ```
 
-Direction is **detected automatically**: Arabic-script gibberish converts to
-English, Latin gibberish converts to Arabic.
+Direction is **detected automatically**. You never switch layouts manually.
 
-## Install (one time)
+## Run it
 
-1. Install **AutoHotkey v2.0** (free): https://www.autohotkey.com
-   *(This script needs v2, not the older v1.)*
-2. Double-click **`LayoutFix.ahk`**. A green **H** icon appears in your system tray.
-   It now runs in the background and starts working immediately.
-3. *(Optional)* To start it automatically with Windows, press `Win+R`, type
-   `shell:startup`, and drop a shortcut to `LayoutFix.ahk` in that folder.
+Just double-click **`LayoutFix.exe`**. A tray icon appears and it works right away.
 
-## Use
+On first run it **registers itself to start with Windows** automatically (a
+shortcut in your Startup folder — no admin needed). Turn this off anytime from
+the tray menu → **"Run at Windows startup"**.
 
-The tool always runs in the tray and quietly remembers the last word you typed.
-There is **one trigger: press Shift twice quickly (double-Shift).**
+> Want to edit the source instead of using the exe? Install
+> [AutoHotkey v2.0](https://www.autohotkey.com) (free) and run `LayoutFix.ahk`.
 
-| Action | What double-Shift does |
-|--------|------------------------|
-| Just finished typing a wrong-layout word | Press **Shift Shift** → it deletes the gibberish and types the corrected text in place. |
-| Want to fix existing text | **Select it** (e.g. `Ctrl+A` to select all), then press **Shift Shift** → the selection is replaced with the corrected version. |
+## Use it
 
-Logic: if text is selected, double-Shift fixes the **selection**; otherwise it
-fixes the **last word you typed**. Direction (Arabic ⇄ English) is detected
-automatically — you never switch layouts manually.
+Type on the wrong layout, then **tap Shift quickly** — the gibberish is deleted
+and the corrected text is typed in its place.
 
-A new word starts after you press **Space**, **Enter**, or **Tab**.
+| You want to... | Do this |
+|----------------|---------|
+| Fix the word you just typed | **Shift × 2** (double-tap) |
+| Fix the whole sentence/line you just typed | **Shift × 3** (triple-tap) |
+| Fix existing text | **Select it** (e.g. `Ctrl+A`), then **Shift × 2** |
+| Flip text back the other way | Repeat the same tap on it |
 
-### Double-Shift won't disturb normal typing
-A *single* Shift, or Shift held together with a letter (capital letters), works
-exactly as normal. Only **two quick, lone Shift taps** (within ~0.35 s, with no
-other key pressed in between) trigger a conversion. You can change the timing by
-editing `DOUBLE_SHIFT_MS` near the top of the hotkey section.
+A new **word** starts after Space/Enter/Tab. A new **sentence** starts after
+Enter or Tab (spaces stay part of the sentence).
 
-## Why a trigger instead of fully automatic?
+**Turn on/off:** press **Left+Right Shift** together (or use the tray menu).
+
+Normal typing is never disturbed — a single Shift, or Shift+letter for capitals,
+behaves as usual. Only quick, lone Shift taps trigger a conversion.
+
+## Tray menu
+
+Right-click the tray icon for:
+
+- **Layout** — switch the keyboard pair (e.g. *English ⇄ Arabic (101)*). More
+  pairs can be added in the source; the menu lists them automatically.
+- **Enable / Disable** — master on/off.
+- **Run at Windows startup** — toggle auto-start.
+
+Your on/off state and chosen layout are **saved** (in `LayoutFix.ini`) and
+restored next time you run it.
+
+## Why a trigger, not fully automatic?
 
 `hkh` typed-as-Arabic and `hkh` as a real English abbreviation are the *exact
-same keystrokes* — nothing can tell them apart with 100% certainty. A fully
-silent auto-rewrite would sometimes corrupt text you typed correctly. The
-double-Shift trigger keeps you in control while still giving the instant feel.
+same keystrokes* — nothing can tell them apart for certain. The Shift-tap
+trigger keeps you in control while still feeling instant.
 
-## Customising the layout
+## Customising
 
-The script is built for the **US-English** layout and the standard
-**Arabic (101)** Windows layout. If your physical keyboard differs, edit the
-`engKeys` / `araKeys` arrays at the top of `LayoutFix.ahk` — index *N* in one
-array maps to index *N* in the other.
-
-## Verified
-
-The exact example `hkh h;jf fhguvfdi` → `انا اكتب بالعربيه`, and the reverse
-direction, were tested against the standard layout maps and round-trip cleanly.
+Built for the **US-English** and standard **Arabic (101)** Windows layouts. To
+add another keyboard, append an entry to the `LAYOUTS` table in `LayoutFix.ahk`
+(an array of the characters each physical key produces, in the same order as
+`engKeys`), then recompile — it appears in the tray **Layout** menu
+automatically. Conversion timing lives in `DOUBLE_SHIFT_MS`.
